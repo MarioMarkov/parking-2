@@ -11,6 +11,7 @@ import time
 import os
 from PIL import Image
 from tempfile import TemporaryDirectory
+from tqdm import tqdm
 
 
 def train_model(
@@ -44,7 +45,7 @@ def train_model(
                 running_loss = 0.0
                 running_corrects = 0
                 # Iterate over data.
-                for inputs, labels in dataloaders[phase]:
+                for inputs, labels in tqdm(dataloaders[phase]):
                     inputs = inputs.to(device)
                     labels = labels.to(device)
 
@@ -69,7 +70,7 @@ def train_model(
                 if phase == "train":
                     scheduler.step()
                 epoch_loss = running_loss / dataset_sizes[phase]
-                epoch_acc = running_corrects.double() / dataset_sizes[phase]
+                epoch_acc = running_corrects.to(torch.float32) / dataset_sizes[phase]
 
                 print(f"{phase} Loss: {epoch_loss:.4f} Acc: {epoch_acc:.4f}")
 
@@ -77,8 +78,11 @@ def train_model(
                 if phase == "val" and epoch_acc > best_acc:
                     best_acc = epoch_acc
                     torch.save(model.state_dict(), best_model_params_path)
+                    torch.save(model, "./model_fc_2")
 
             print()
+            PATH = "./model_res_net.pth"
+            torch.save(model.state_dict(), PATH)
 
         time_elapsed = time.time() - since
         print(
