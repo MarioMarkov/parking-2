@@ -22,13 +22,14 @@ def train_model(
     dataloaders,
     dataset_sizes,
     device,
+    model_name,
     num_epochs=25,
 ):
     since = time.time()
     # Create a temporary directory to save training checkpoints
     with TemporaryDirectory() as tempdir:
         best_model_params_path = os.path.join(tempdir, "best_model_params.pt")
-
+        print(best_model_params_path)
         torch.save(model.state_dict(), best_model_params_path)
         best_acc = 0.0
 
@@ -77,8 +78,8 @@ def train_model(
                 # deep copy the model
                 if phase == "val" and epoch_acc > best_acc:
                     best_acc = epoch_acc
-                    torch.save(model.state_dict(), best_model_params_path)
-                    torch.save(model, "./model_fc_2")
+                    torch.save(model.state_dict(), "best_model" +model_name + ".pth")
+                    torch.save(model, "./full" + model_name + ".pth")
 
             print()
             PATH = "./model_res_net.pth"

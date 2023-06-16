@@ -13,16 +13,45 @@ import argparse
 from PIL import Image
 from tempfile import TemporaryDirectory
 from train import train_model
+from utils.image_utils import imshow
+from utils.viz_model  import visualize_model_predictions, visualize_model
+plt.ion()
 
-FLAGS = argparse.ArgumentParser(description='Train AlexNet')
+FLAGS = argparse.ArgumentParser(description='Train ResNet')
 
 FLAGS.add_argument('--data_dir', default="parking_data/", 
                    help='Location to the data oath')
-FLAGS.add_argument('--model_name', default="alex_net", 
-                   help='Model name')
+FLAGS.add_argument('--model_name', default="res_net", 
+                   help='Name of the model')
 args = FLAGS.parse_args()
 
-def main():
+
+def train(device, model, dataloaders):
+        
+    model.to(device)
+    
+    # Loss
+    criterion = nn.CrossEntropyLoss()
+    # Observe that all parameters are being optimized
+    optimizer_ft = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
+
+    # Decay LR by a factor of 0.1 every 7 epochs
+    exp_lr_scheduler = lr_scheduler.StepLR(optimizer_ft, step_size=7, gamma=0.1)
+
+    model = train_model(
+        model,
+        criterion,
+        optimizer_ft,
+        exp_lr_scheduler,
+        dataloaders,
+        dataset_sizes,
+        device,
+        args.model_name,
+        num_epochs=5,
+    )
+
+if __name__ == "__main__":
+    data_dir = "parking_data/"
     device = "cpu"
     if torch.cuda.is_available():
         device = torch.device("cuda")
@@ -30,7 +59,6 @@ def main():
         device = torch.device("mps")
 
     print(device)
-    data_dir = args.data_dir
 
     data_transforms = {
         "train": transforms.Compose(
@@ -44,7 +72,7 @@ def main():
         "val": transforms.Compose(
             [
                 transforms.Resize(256),
-                transforms.CenterCrop(227),
+                transforms.CenterCrop(224),
                 transforms.ToTensor(),
                 transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
             ]
@@ -64,58 +92,26 @@ def main():
     }
 
     dataset_sizes = {x: len(image_datasets[x]) for x in ["train", "val"]}
-    # 1 and 0
-    class_names = image_datasets["train"].classes
+    
+    model_ft = models.resnet18(weights="IMAGENET1K_V1")
 
-    def imshow(inp, title=None):
-        """Display image for Tensor."""
-        inp = inp.numpy().transpose((1, 2, 0))
-        mean = np.array([0.485, 0.456, 0.406])
-        std = np.array([0.229, 0.224, 0.225])
-        inp = std * inp + mean
-        inp = np.clip(inp, 0, 1)
-        plt.imshow(inp)
-        if title is not None:
-            plt.title(title)
-        plt.pause(0.001)  # pause a bit so that plots are updated
-
-    # Get a batch of training data
-    inputs, classes = next(iter(dataloaders["train"]))
-
-    # Make a grid from batch
-    out = torchvision.utils.make_grid(inputs)
-
-    # imshow(out, title=[ class_names[x] for x in classes])
-
-    # plt.show()
-    model_ft = models.alexnet(weights="IMAGENET1K_V1")
-
-    num_ftrs = model_ft.classifier[-1].in_features
+    num_ftrs = model_ft.fc.in_features
+    
     # Here the size of each output sample is set to 2.
-    model_ft.classifier[-1] = nn.Linear(num_ftrs, 2)
-    print(model_ft)
-    model_ft = model_ft.to(device)
+    model_ft.fc = nn.Linear(num_ftrs, 2)
 
-    criterion = nn.CrossEntropyLoss()
+    train(device, model_ft, dataloaders)
 
-    # Observe that all parameters are being optimized
-    optimizer_ft = optim.SGD(model_ft.parameters(), lr=0.001, momentum=0.9)
-
-    # Decay LR by a factor of 0.1 every 7 epochs
-    exp_lr_scheduler = lr_scheduler.StepLR(optimizer_ft, step_size=7, gamma=0.1)
-
-    model_ft = train_model(
-        model_ft,
-        criterion,
-        optimizer_ft,
-        exp_lr_scheduler,
-        dataloaders,
-        dataset_sizes,
-        device,
-        args.model_name,
-        num_epochs=5,
+    model_ft.load_state_dict(
+        torch.load("best_model_res_net.pth", map_location=torch.device(device))
     )
-
-
-if __name__ == "__main__":
-    main()
+    model_ft.to(device)
+    print("Model loaded!")
+    print("Last layer: ", model_ft.fc)
+    visualize_model(model_ft, dataloaders, device=device)
+    # visualize_model_predictions(
+    #     model_ft, img_path="R_2015-11-21_07.40_C01_184.jpg",
+    #     data_transforms= data_transforms,
+    #     device=device, 
+    # )
+    

@@ -1,3 +1,5 @@
 /all_images
 /data
 *.pth
+/inference
+/predicted_images
