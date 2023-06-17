@@ -78,11 +78,11 @@ def train_model(
                 # deep copy the model
                 if phase == "val" and epoch_acc > best_acc:
                     best_acc = epoch_acc
-                    torch.save(model.state_dict(), "best_model" +model_name + ".pth")
+                    torch.save(model.state_dict(), "state_dict__" +model_name + ".pth")
                     torch.save(model, "./full" + model_name + ".pth")
 
             print()
-            PATH = "./model_res_net.pth"
+            PATH = "./final" + model_name + ".pth"
             torch.save(model.state_dict(), PATH)
 
         time_elapsed = time.time() - since

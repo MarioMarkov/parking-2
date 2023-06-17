@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import torch.nn as nn
 import time 
 import os 
+
 # Full image 
 device = "cpu"
 if torch.cuda.is_available():
@@ -19,9 +20,6 @@ elif torch.backends.mps.is_available():
 image_folder = "inference/parking_mag/"
 annotation_folder = "inference/annotations/"
 
-image_file = "inference/parking_mag/20230608_110054.jpg"
-full_image = Image.open(image_file) 
-
 predicted_images = "/predicted_images/"
 # Annotations
 xml_file = "inference/annotations/20230608_110054.xml"
@@ -31,15 +29,15 @@ bndbox_values = extract_bndbox_values(xml_file)
 # Transformations
 transform = transforms.Compose([
                 transforms.Resize(256),
-                #transforms.CenterCrop(227),
+                transforms.CenterCrop(224),
                 transforms.ToTensor(),
                 transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
 ]) 
 
 #model_ft = models.alexnet(weights="IMAGENET1K_V1")
-model_ft = torch.load("alex_net.pth", map_location=device)
+model_ft = torch.load("full_alex_net.pth", map_location=device)
 print(model_ft)
-model_ft.eval()
+#model_ft.eval()
 
 # num_ftrs = model_ft.fc.in_features
 # # Here the size of each output sample is set to 2.
@@ -62,6 +60,7 @@ for image_filename in os.listdir(image_folder):
     image_path = os.path.join(image_folder,image_filename)
     
     image_to_draw = cv2.imread(image_path)
+    full_image = Image.open(image_path) 
 
     if image_filename.endswith(".jpg") or image_filename.endswith(".png"):
         annotation_filename = os.path.join(annotation_folder, image_filename.replace(".jpg", ".xml").replace(".png", ".xml"))
@@ -69,6 +68,7 @@ for image_filename in os.listdir(image_folder):
         # Check if the annotation file exists
         if os.path.isfile(annotation_filename):
             bndbox_values = extract_bndbox_values(annotation_filename)
+            
             for key in bndbox_values:
                 values = bndbox_values[key]
                 #Extract coordinates from the bounding box
@@ -80,11 +80,11 @@ for image_filename in os.listdir(image_folder):
                 patch = full_image.crop((xmin, ymin, xmax, ymax))
 
                 #img = Image.open(patch)
-                img = transform(patch)
+                #image_to_show = np.transpose(np.array(patch),(1, 2, 0))
+                # plt.imshow(patch)
+                # plt.show()
                 
-                image_to_show = np.transpose(np.array(img),(1, 2, 0))
-                plt.imshow(image_to_show)
-                plt.show()
+                img = transform(patch)
                 
                 img = img.unsqueeze(0)
                 img = img.to(device)
@@ -92,7 +92,6 @@ for image_filename in os.listdir(image_folder):
                     outputs = model_ft(img)
                     _, preds = torch.max(outputs, 1)
                     is_busy = preds[0]
-                
                 
                 
                 if(is_busy == 1):

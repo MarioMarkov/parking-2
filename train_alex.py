@@ -113,7 +113,7 @@ def main():
         dataset_sizes,
         device,
         args.model_name,
-        num_epochs=5,
+        num_epochs=3,
     )
 
 

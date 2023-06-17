@@ -47,7 +47,7 @@ def train(device, model, dataloaders):
         dataset_sizes,
         device,
         args.model_name,
-        num_epochs=5,
+        num_epochs=3,
     )
 
 if __name__ == "__main__":

@@ -2,9 +2,6 @@ import os
 import shutil
 from tqdm import tqdm
 
-
-
-
 # Function to read the labels from the text file
 def read_labels(label_file):
     labels = {}
@@ -30,8 +27,6 @@ def split_images(source_folder, label_file, destination_folder):
                     os.makedirs(label_folder, exist_ok=True)
                     shutil.copy2(os.path.join(root, file), label_folder)
            
-
-    
 
 # Usage example
 source_folder = 'data/PATCHES'
