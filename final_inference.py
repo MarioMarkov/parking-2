@@ -10,7 +10,6 @@ import torch.nn as nn
 import time 
 import os 
 
-# Full image 
 device = "cpu"
 if torch.cuda.is_available():
     device = torch.device("cuda")
@@ -85,7 +84,8 @@ for image_filename in os.listdir(image_folder):
                 # plt.show()
                 
                 img = transform(patch)
-                
+                print(img.size())
+
                 img = img.unsqueeze(0)
                 img = img.to(device)
                 with torch.no_grad():
