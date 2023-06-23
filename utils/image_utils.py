@@ -3,6 +3,8 @@ import math
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
+
+
 def extract_bndbox_values(file_path):
     tree = ET.parse(file_path)
     root = tree.getroot()

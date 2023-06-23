@@ -17,9 +17,11 @@ from train import train_model
 FLAGS = argparse.ArgumentParser(description='Train AlexNet')
 
 FLAGS.add_argument('--data_dir', default="parking_data/", 
-                   help='Location to the data oath')
+                   help='Location to the data path')
 FLAGS.add_argument('--model_name', default="alex_net", 
                    help='Model name')
+FLAGS.add_argument('--epochs', default=3, 
+                   help='Epochs for model')
 args = FLAGS.parse_args()
 
 def main():
@@ -64,6 +66,7 @@ def main():
     }
 
     dataset_sizes = {x: len(image_datasets[x]) for x in ["train", "val"]}
+    print(dataset_sizes)
     # 1 and 0
     class_names = image_datasets["train"].classes
 
@@ -88,12 +91,33 @@ def main():
     # imshow(out, title=[ class_names[x] for x in classes])
 
     # plt.show()
+    
+    # Loading model weights
     model_ft = models.alexnet(weights="IMAGENET1K_V1")
+    
+    model_ft.classifier = nn.Sequential(
+            nn.Dropout(p=0.5, inplace=False),
+            nn.Linear(in_features=4096, out_features=2048, bias=True),
+            nn.ReLU(inplace=True),
+            nn.Dropout(p=0.5, inplace=False),
+            nn.Linear(in_features=2048, out_features=1024, bias=True),
+            nn.ReLU(inplace=True),
+            nn.Linear(in_features=1024, out_features=2, bias=True),
+    )
+    
+    
+    # Getting the number of features in the last layer
+    # num_ftrs = model_ft.classifier[-1].in_features
+    
+    # # # Making the output neurons to be 2 for 1 and 0
+    # model_ft.classifier[-1] = nn.Linear(num_ftrs, 2)
+    
+    pytorch_train_params = sum(p.numel() for p in model_ft.parameters() if p.requires_grad)
 
-    num_ftrs = model_ft.classifier[-1].in_features
-    # Here the size of each output sample is set to 2.
-    model_ft.classifier[-1] = nn.Linear(num_ftrs, 2)
+    print(f"Trainable params {pytorch_train_params}")
+    
     print(model_ft)
+    
     model_ft = model_ft.to(device)
 
     criterion = nn.CrossEntropyLoss()
@@ -113,7 +137,7 @@ def main():
         dataset_sizes,
         device,
         args.model_name,
-        num_epochs=3,
+        num_epochs= args.epochs,
     )
 
 
