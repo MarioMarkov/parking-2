@@ -14,6 +14,8 @@ from PIL import Image
 from tempfile import TemporaryDirectory
 from train import train_model
 
+
+# python train_alex.py --model_name=malex_net_pk_lot --data_dir=pk_lot_data --epochs=3 
 FLAGS = argparse.ArgumentParser(description='Train AlexNet')
 
 FLAGS.add_argument('--data_dir', default="parking_data/", 
@@ -97,7 +99,7 @@ def main():
     
     model_ft.classifier = nn.Sequential(
             nn.Dropout(p=0.5, inplace=False),
-            nn.Linear(in_features=4096, out_features=2048, bias=True),
+            nn.Linear(in_features=9216, out_features=2048, bias=True),
             nn.ReLU(inplace=True),
             nn.Dropout(p=0.5, inplace=False),
             nn.Linear(in_features=2048, out_features=1024, bias=True),
@@ -137,7 +139,7 @@ def main():
         dataset_sizes,
         device,
         args.model_name,
-        num_epochs= args.epochs,
+        num_epochs= int(args.epochs),
     )
 
 

@@ -78,7 +78,9 @@ def train_model(
                 # deep copy the model
                 if phase == "val" and epoch_acc > best_acc:
                     best_acc = epoch_acc
-                    torch.save(model.state_dict(), "state_dict_" + model_name + ".pth")
+                    torch.save(
+                        model.state_dict(), "./state_dict_" + model_name + ".pth"
+                    )
                     torch.save(model, "./full_" + model_name + ".pth")
 
             print()
