@@ -18,11 +18,15 @@ elif torch.backends.mps.is_available():
 
 image_folder = "inference/parking_mag/"
 annotation_folder = "inference/annotations/"
-
+model_dir = "models/full_m_alex_net_pk_lot.pth"
 predicted_images = "/predicted_images/"
 
 # Annotations
 xml_file = "inference/annotations/20230608_110054.xml"
+
+if not os.path.isdir("predicted_images"):
+    os.mkdir("predicted_images")
+
 
 # Get Bounding box values
 bndbox_values = extract_bndbox_values(xml_file)
@@ -37,7 +41,7 @@ transform = transforms.Compose(
 )
 
 # model_ft = models.alexnet(weights="IMAGENET1K_V1")
-model = torch.load("full_alex_net_pk_lot.pth", map_location=device)
+model = torch.load(model_dir, map_location=device)
 model.eval()
 
 model.to(device)
@@ -106,6 +110,7 @@ for image_filename in os.listdir(image_folder):
                         2,
                     )
             print(image_filename)
+            
             cv2.imwrite(f"predicted_images/{image_filename}", image_to_draw)
 
 

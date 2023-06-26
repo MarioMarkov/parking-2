@@ -1,0 +1,242 @@
+<detections>
+  
+    <coordinates>
+      <xmax>742.180908203125</xmax>
+      <xmin>570.678955078125</xmin>
+      <ymax>719.7113647460938</ymax>
+      <ymin>608.7504272460938</ymin>
+    </coordinates>
+  
+  
+    <coordinates>
+      <xmax>1114.146240234375</xmax>
+      <xmin>984.861328125</xmin>
+      <ymax>497.82159423828125</ymax>
+      <ymin>426.9374084472656</ymin>
+    </coordinates>
+  
+  
+    <coordinates>
+      <xmax>216.8873291015625</xmax>
+      <xmin>76.15361785888672</xmin>
+      <ymax>719.20361328125</ymax>
+      <ymin>595.501708984375</ymin>
+    </coordinates>
+  
+  
+    <coordinates>
+      <xmax>855.89599609375</xmax>
+      <xmin>740.286865234375</xmin>
+      <ymax>510.91119384765625</ymax>
+      <ymin>435.1031799316406</ymin>
+    </coordinates>
+  
+  
+    <coordinates>
+      <xmax>386.26513671875</xmax>
+      <xmin>273.06231689453125</xmin>
+      <ymax>718.5330810546875</ymax>
+      <ymin>627.9534912109375</ymin>
+    </coordinates>
+  
+  
+    <coordinates>
+      <xmax>204.0021514892578</xmax>
+      <xmin>125.79887390136719</xmin>
+      <ymax>551.4544067382812</ymax>
+      <ymin>466.60577392578125</ymin>
+    </coordinates>
+  
+  
+    <coordinates>
+      <xmax>778.30322265625</xmax>
+      <xmin>662.897705078125</xmin>
+      <ymax>526.2516479492188</ymax>
+      <ymin>441.48809814453125</ymin>
+    </coordinates>
+  
+  
+    <coordinates>
+      <xmax>1280.0</xmax>
+      <xmin>1091.416259765625</xmin>
+      <ymax>655.8211669921875</ymax>
+      <ymin>547.7772216796875</ymin>
+    </coordinates>
+  
+  
+    <coordinates>
+      <xmax>431.2588195800781</xmax>
+      <xmin>346.4699401855469</xmin>
+      <ymax>535.447021484375</ymax>
+      <ymin>455.9832458496094</ymin>
+    </coordinates>
+  
+  
+    <coordinates>
+      <xmax>495.2930908203125</xmax>
+      <xmin>414.78192138671875</xmin>
+      <ymax>491.8441162109375</ymax>
+      <ymin>426.0574035644531</ymin>
+    </coordinates>
+  
+  
+    <coordinates>
+      <xmax>334.24542236328125</xmax>
+      <xmin>252.97059631347656</xmin>
+      <ymax>543.969970703125</ymax>
+      <ymin>466.56103515625</ymin>
+    </coordinates>
+  
+  
+    <coordinates>
+      <xmax>47.337379455566406</xmax>
+      <xmin>0.0</xmin>
+      <ymax>715.6666870117188</ymax>
+      <ymin>631.1746215820312</ymin>
+    </coordinates>
+  
+  
+    <coordinates>
+      <xmax>1280.0</xmax>
+      <xmin>1200.9114990234375</xmin>
+      <ymax>467.66644287109375</ymax>
+      <ymin>414.72711181640625</ymin>
+    </coordinates>
+  
+  
+    <coordinates>
+      <xmax>1005.3384399414062</xmax>
+      <xmin>846.0451049804688</xmin>
+      <ymax>695.4862670898438</ymax>
+      <ymin>568.8265991210938</ymin>
+    </coordinates>
+  
+  
+    <coordinates>
+      <xmax>1213.50048828125</xmax>
+      <xmin>1101.136474609375</xmin>
+      <ymax>441.58221435546875</ymax>
+      <ymin>391.24334716796875</ymin>
+    </coordinates>
+  
+  
+    <coordinates>
+      <xmax>92.90812683105469</xmax>
+      <xmin>19.519058227539062</xmin>
+      <ymax>546.4873046875</ymax>
+      <ymin>473.493896484375</ymin>
+    </coordinates>
+  
+  
+    <coordinates>
+      <xmax>940.392333984375</xmax>
+      <xmin>823.1671142578125</xmin>
+      <ymax>502.48199462890625</ymax>
+      <ymin>418.39459228515625</ymin>
+    </coordinates>
+  
+  
+    <coordinates>
+      <xmax>219.50070190429688</xmax>
+      <xmin>165.76788330078125</xmin>
+      <ymax>428.21075439453125</ymax>
+      <ymin>377.79302978515625</ymin>
+    </coordinates>
+  
+  
+    <coordinates>
+      <xmax>1209.750732421875</xmax>
+      <xmin>989.681884765625</xmin>
+      <ymax>685.9900512695312</ymax>
+      <ymin>570.1013793945312</ymin>
+    </coordinates>
+  
+  
+    <coordinates>
+      <xmax>118.12031555175781</xmax>
+      <xmin>54.441287994384766</xmin>
+      <ymax>499.1728515625</ymax>
+      <ymin>441.2095031738281</ymin>
+    </coordinates>
+  
+  
+    <coordinates>
+      <xmax>680.9609375</xmax>
+      <xmin>601.432861328125</xmin>
+      <ymax>475.1950378417969</ymax>
+      <ymin>402.6513366699219</ymin>
+    </coordinates>
+  
+  
+    <coordinates>
+      <xmax>286.8747863769531</xmax>
+      <xmin>236.60549926757812</xmin>
+      <ymax>422.185791015625</ymax>
+      <ymin>374.554443359375</ymin>
+    </coordinates>
+  
+  
+    <coordinates>
+      <xmax>150.26808166503906</xmax>
+      <xmin>98.02474975585938</xmin>
+      <ymax>426.0746154785156</ymax>
+      <ymin>380.7025451660156</ymin>
+    </coordinates>
+  
+  
+    <coordinates>
+      <xmax>765.3450927734375</xmax>
+      <xmin>673.3154296875</xmin>
+      <ymax>453.8973693847656</ymax>
+      <ymin>399.2275085449219</ymin>
+    </coordinates>
+  
+  
+    <coordinates>
+      <xmax>480.5808410644531</xmax>
+      <xmin>422.2124938964844</xmin>
+      <ymax>383.5280456542969</ymax>
+      <ymin>341.3189392089844</ymin>
+    </coordinates>
+  
+  
+    <coordinates>
+      <xmax>920.4378662109375</xmax>
+      <xmin>701.6905517578125</xmin>
+      <ymax>714.3252563476562</ymax>
+      <ymin>541.1554565429688</ymin>
+    </coordinates>
+  
+  
+    <coordinates>
+      <xmax>494.9791259765625</xmax>
+      <xmin>357.328369140625</xmin>
+      <ymax>515.5101928710938</ymax>
+      <ymin>439.2047119140625</ymin>
+    </coordinates>
+  
+  
+    <coordinates>
+      <xmax>1004.4815673828125</xmax>
+      <xmin>897.087158203125</xmin>
+      <ymax>454.1723937988281</ymax>
+      <ymin>392.7586364746094</ymin>
+    </coordinates>
+  
+  
+    <coordinates>
+      <xmax>1273.140869140625</xmax>
+      <xmin>1151.2392578125</xmin>
+      <ymax>433.6040954589844</ymax>
+      <ymin>385.5768127441406</ymin>
+    </coordinates>
+  
+  
+    <coordinates>
+      <xmax>576.10498046875</xmax>
+      <xmin>507.669189453125</xmin>
+      <ymax>408.59063720703125</ymax>
+      <ymin>355.9498291015625</ymin>
+    </coordinates>
+  
+</detections>
