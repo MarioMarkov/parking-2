@@ -1,31 +1,28 @@
 import torch
-import torch.nn as nn
-import torch.optim as optim
-from torch.optim import lr_scheduler
-import torch.backends.cudnn as cudnn
-import numpy as np
-import torchvision
-from torchvision import datasets, models, transforms
-import matplotlib.pyplot as plt
 import time
 import os
-from PIL import Image
 from tempfile import TemporaryDirectory
 from tqdm import tqdm
+import torch.optim as optim
+from torch.optim import lr_scheduler
+import torch.nn as nn
 
 
 def train_model(
     model,
-    criterion,
-    optimizer,
-    scheduler,
     dataloaders,
     dataset_sizes,
     device,
     model_name,
-    num_epochs=25,
+    num_epochs=3,
 ):
     since = time.time()
+    
+    # Define optimizer for nn
+    criterion = nn.CrossEntropyLoss()
+    optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
+    scheduler = lr_scheduler.StepLR(optimizer, step_size=7, gamma=0.1)
+    
     # Create a temporary directory to save training checkpoints
     with TemporaryDirectory() as tempdir:
         best_model_params_path = os.path.join(tempdir, "best_model_params.pt")

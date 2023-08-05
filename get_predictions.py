@@ -18,7 +18,7 @@ elif torch.backends.mps.is_available():
 
 image_folder = "inference/parking_mag/"
 annotation_folder = "inference/annotations/"
-model_dir = "models/full_m_alex_net_pk_lot.pth"
+model_dir = "models/full_256_alex_net_pk_lot.pth"
 predicted_images = "/predicted_images/"
 
 # Annotations
@@ -110,7 +110,7 @@ for image_filename in os.listdir(image_folder):
                         2,
                     )
             print(image_filename)
-            
+
             cv2.imwrite(f"predicted_images/{image_filename}", image_to_draw)
 
 
