@@ -21,8 +21,8 @@ model.qconfig = torch.quantization.get_default_qconfig(backend)
 torch.backends.quantized.engine = backend
 
 # # Post Training Static Quantization
-# model_static_quantized = torch.quantization.prepare(model, inplace=False)
-# model_static_quantized = torch.quantization.convert(model_static_quantized, inplace=False)
+model_static_quantized = torch.quantization.prepare(model, inplace=False)
+model_static_quantized = torch.quantization.convert(model_static_quantized, inplace=False)
 
 # def print_model_size(mdl):
 #     torch.save(mdl.state_dict(), "tmp.pt")

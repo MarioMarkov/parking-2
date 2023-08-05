@@ -1,7 +1,6 @@
-/all_images
-/data
 *.pth
 /inference
+/intersections
 /predicted_images
 .mp4
 mask_1920_1080.png
