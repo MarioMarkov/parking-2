@@ -9,16 +9,19 @@ import matplotlib.pyplot as plt
 import torch.nn as nn
 import time
 import os
+from utils.image_utils import mAlexNet
 
 device = "cpu"
 if torch.cuda.is_available():
     device = torch.device("cuda")
 elif torch.backends.mps.is_available():
     device = torch.device("mps")
+    
+print(f"Using {device}")
 
 image_folder = "inference/parking_mag/"
 annotation_folder = "inference/annotations/"
-model_dir = "models/full_256_alex_net_pk_lot.pth"
+model_dir = "models/m_alex_net.pth"
 predicted_images = "/predicted_images/"
 
 # Annotations
@@ -41,12 +44,16 @@ transform = transforms.Compose(
 )
 
 # model_ft = models.alexnet(weights="IMAGENET1K_V1")
-model = torch.load(model_dir, map_location=device)
+
+model = mAlexNet(num_classes=2).to(device)
+# model.load_state_dict(torch.load(model_path, map_location=torch.device(device)))
+model.load_state_dict(
+    torch.load(model_dir, map_location=torch.device(device))
+)
 model.eval()
 
 model.to(device)
 start_time = time.time()
-
 
 # for image in image_folder
 # find annotation with the same name in annotation folder
