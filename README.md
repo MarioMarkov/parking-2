@@ -1,7 +1,7 @@
 # parking-spot-detection
 Scripts to train a parking spot detection model
 
-Run training the model with:
+Run the main file like this to start training the model:
 ```
 python main.py --model_type=m_alex_net --model_name=malex_net_pk_lot --data_dir=pk_lot_data --epochs=2 
 ```
