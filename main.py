@@ -5,9 +5,13 @@ import torchvision
 import torch.nn as nn
 
 from train import train_model
+#from test import test_model
+
 from torchvision import datasets, models, transforms
 
+from utils.image_utils import mAlexNet
 
+train = True
 # python main.py --model_name=malex_net_pk_lot --data_dir=pk_lot_data --epochs=2
 FLAGS = argparse.ArgumentParser(description="Train Model")
 
@@ -75,30 +79,36 @@ def main():
         model.classifier[-1].out_features = 2
 
     else:
-        model = models.alexnet(weights="IMAGENET1K_V1")
-        model.classifier = nn.Sequential(
-            nn.Dropout(p=0.5, inplace=False),
-            nn.Linear(in_features=9216, out_features=256, bias=True),
-            nn.ReLU(inplace=True),
-            nn.Dropout(p=0.5, inplace=False),
-            nn.Linear(in_features=256, out_features=128, bias=True),
-            nn.ReLU(inplace=True),
-            nn.Linear(in_features=128, out_features=2, bias=True),
-        )
+        # model = models.alexnet(weights="IMAGENET1K_V1")
+        # model.classifier = nn.Sequential(
+        #     nn.Dropout(p=0.5, inplace=False),
+        #     nn.Linear(in_features=9216, out_features=256, bias=True),
+        #     nn.ReLU(inplace=True),
+        #     nn.Dropout(p=0.5, inplace=False),
+        #     nn.Linear(in_features=256, out_features=128, bias=True),
+        #     nn.ReLU(inplace=True),
+        #     nn.Linear(in_features=128, out_features=2, bias=True),
+        # )
+        model = mAlexNet()
 
     # Send model to device
     model = model.to(device)
 
     print("Model parameters: ", sum(p.numel() for p in model.parameters() if p.requires_grad) )
 
-    model = train_model(
-        model,
-        dataloaders,
-        dataset_sizes,
-        device,
-        args.model_name,
-        num_epochs=int(args.epochs),
-    )
+    
+    if train == True:
+        model = train_model(
+            model,
+            dataloaders,
+            dataset_sizes,
+            device,
+            args.model_name,
+            num_epochs=int(args.epochs),
+        )
+    else: 
+        #test_model()
+        pass
 
 if __name__ == "__main__":
     main()

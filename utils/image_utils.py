@@ -4,6 +4,7 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 import torch.nn as nn
+
 class mAlexNet(nn.Module):
     def __init__(self, num_classes=2):
         super().__init__()

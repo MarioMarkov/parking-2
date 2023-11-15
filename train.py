@@ -1,7 +1,6 @@
 import torch
 import time
 import os
-from tempfile import TemporaryDirectory
 from tqdm import tqdm
 import torch.optim as optim
 from torch.optim import lr_scheduler
@@ -18,7 +17,7 @@ def train_model(
     num_epochs=3,
 ):
     since = time.time()
-    torch.backends.quantized.engine = backend
+    #torch.backends.quantized.engine = backend
 
     # Define optimizer for nn
     criterion = nn.CrossEntropyLoss()
