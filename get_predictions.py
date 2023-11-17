@@ -21,18 +21,13 @@ print(f"Using {device}")
 
 image_folder = "inference/parking_mag/"
 annotation_folder = "inference/annotations/"
-model_dir = "models/m_alex_net.pth"
+model_dir = "models/m_alex_net_combined.pth"
 predicted_images = "/predicted_images/"
-
-# Annotations
-xml_file = "inference/annotations/20230608_110054.xml"
 
 if not os.path.isdir("predicted_images"):
     os.mkdir("predicted_images")
 
 
-# Get Bounding box values
-bndbox_values = extract_bndbox_values(xml_file)
 # Transformations
 transform = transforms.Compose(
     [
@@ -43,10 +38,8 @@ transform = transforms.Compose(
     ]
 )
 
-# model_ft = models.alexnet(weights="IMAGENET1K_V1")
 
 model = mAlexNet(num_classes=2).to(device)
-# model.load_state_dict(torch.load(model_path, map_location=torch.device(device)))
 model.load_state_dict(
     torch.load(model_dir, map_location=torch.device(device))
 )
