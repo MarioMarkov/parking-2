@@ -14,7 +14,7 @@ from utils.image_utils import mAlexNet
 
 
 #train
-# python main.py --model_name=malex_net_pk_lot --data_dir=pk_lot_data --epochs=2 --dataset=both -train 
+# python main.py --model_name=malex_net_pk_lot --pk_lot_dir=pk_lot_data --cnr_park_dir=cnr_parking_data --epochs=2 --dataset=both  -train 
 
 #test 
 # python main.py --model_name=malex_net_combined_state_dict --dataset=cnr_park
@@ -33,8 +33,8 @@ FLAGS.add_argument(
     "--dataset", default="pk_lot", help="On which dataset to train or test. Possible values are: 'both', 'pk_lot', 'cnr_park'"
 )
 FLAGS.add_argument("--model_name", default="alex_net", help="Model name")
-FLAGS.add_argument("--epochs", default=3, help="Epochs")
-FLAGS.add_argument("--batch_size", default=16, help="Batch size")
+FLAGS.add_argument("--epochs", default=2, help="Epochs")
+FLAGS.add_argument("--batch_size", default=32, help="Batch size")
 args = FLAGS.parse_args()
 
 
@@ -93,13 +93,13 @@ def main():
     dataloaders= {
         "train": torch.utils.data.DataLoader(
             train_dataset,
-            batch_size=32,
+            batch_size=args.batch_size,
             shuffle=True,
             num_workers=0,
         ),
         "val": torch.utils.data.DataLoader(
             val_dataset,
-            batch_size=32,
+            batch_size=args.batch_size,
             shuffle=True,
             num_workers=0,
         )
