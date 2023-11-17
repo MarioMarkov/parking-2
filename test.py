@@ -1,12 +1,5 @@
 import torch
-import time
-import os
-from tempfile import TemporaryDirectory
 from tqdm import tqdm
-import torch.optim as optim
-from torch.optim import lr_scheduler
-import torch.nn as nn
-
 
 def test_model(
     model,
@@ -15,6 +8,23 @@ def test_model(
     device,
     model_name,
 ):
-    return -1
+    model.load_state_dict(torch.load(f"models\{model_name}.pth"))
+    model.to(device)
+    
+    running_corrects = 0
+    for inputs, labels in tqdm(dataloaders["val"]):
+        inputs = inputs.to(device)
+        labels = labels.to(device)
+        with torch.no_grad():
+            outputs = model(inputs)
+            _, preds = torch.max(outputs, 1)
+            running_corrects += torch.sum(preds == labels.data)
+
+        
+        
+    accuracy = running_corrects.to(torch.float32) / dataset_sizes["val"]
+    accuracy
+    
+    return accuracy
     
     
