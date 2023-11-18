@@ -6,10 +6,9 @@ import matplotlib.pyplot as plt
 import torch.nn as nn
 
 class mAlexNet(nn.Module):
-    def __init__(self, num_classes=2):
+    def __init__(self):
         super().__init__()
         self.input_channel = 3
-        self.num_output = num_classes
         self.layer1 = nn.Sequential(
             nn.Conv2d(
                 in_channels=self.input_channel,
@@ -37,18 +36,15 @@ class mAlexNet(nn.Module):
             nn.Linear(30 * 3 * 3, out_features=48), nn.ReLU(inplace=True)
         )
 
-        self.layer5 = nn.Sequential(
-            nn.Linear(in_features=48, out_features=self.num_output)
-        )
-
+        self.layer5 = nn.Linear(in_features=48, out_features=1)
+        
     def forward(self, x):
         x = self.layer1(x)
         x = self.layer2(x)
         x = self.layer3(x)
         x = x.reshape(x.size(0), -1)
         x = self.layer4(x)
-        logits = self.layer5(x)
-        return logits
+        return self.layer5(x)
 
 
 def extract_bndbox_values(file_path):

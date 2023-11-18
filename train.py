@@ -5,6 +5,7 @@ from tqdm import tqdm
 import torch.optim as optim
 from torch.optim import lr_scheduler
 import torch.nn as nn
+import numpy as np
 
 backend = "qnnpack"
 
@@ -19,9 +20,12 @@ def train_model(
     since = time.time()
     #torch.backends.quantized.engine = backend
 
+    #Use BCEWithLogitsLoss() instead of BCELoss() since BCEWithLogitsLoss()already includes a sigmoid layer
+    criterion = nn.BCEWithLogitsLoss()
+    #criterion = nn.CrossEntropyLoss()
+
     # Define optimizer for nn
-    criterion = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(model.parameters(),lr=0.001, momentum=0.9)
+    optimizer = optim.AdamW(model.parameters(),lr=0.001, fused=True)
     scheduler = lr_scheduler.StepLR(optimizer, step_size=7, gamma=0.1)
 
     #best_model_params_path = os.path.join("best_model_statedict.pt")
@@ -46,7 +50,7 @@ def train_model(
             # Iterate over data
             for inputs, labels in tqdm(dataloaders[phase]):
                 inputs = inputs.to(device)
-                labels = labels.to(device)
+                labels = labels.to(device).unsqueeze(1).float()
 
                 # zero the parameter gradients
                 optimizer.zero_grad()
@@ -55,7 +59,10 @@ def train_model(
                 # track history if only in train
                 with torch.set_grad_enabled(phase == "train"):
                     outputs = model(inputs)
-                    _, preds = torch.max(outputs, 1)
+                    #_, preds = torch.max(outputs, 1)
+                    #preds = np.where(outputs > 0, 1, 0)
+                    preds = (torch.sigmoid(outputs) > 0.5).float()
+
                     loss = criterion(outputs, labels)
 
                     # backward + optimize only if in training phase

@@ -9,6 +9,7 @@ from train import train_model
 #from test import test_model
 
 from torchvision import datasets, models, transforms
+from torch.utils.data import random_split
 
 from utils.image_utils import mAlexNet
 
@@ -73,10 +74,21 @@ def main():
         x: datasets.ImageFolder(os.path.join(pk_lot_dir,x), data_transforms[x])
         for x in ["train", "val"]
     }
+    # Split val set in 2
+    dataset_size = len(image_datasets_pk_lot["val"])
+    split_point = dataset_size // 2
+    image_datasets_pk_lot["val"] , _ = random_split(image_datasets_pk_lot["val"], [split_point, dataset_size - split_point])
+    
+    
+    
     image_datasets_cnr_park = {
         x: datasets.ImageFolder(os.path.join(cnr_park_dir, x), data_transforms[x])
         for x in ["train", "val"]
     }
+    # Split val set in 2
+    dataset_size = len(image_datasets_cnr_park["val"])
+    split_point = dataset_size // 2
+    image_datasets_cnr_park["val"], _ = random_split(image_datasets_cnr_park["val"], [split_point, dataset_size - split_point])
     
     if args.dataset == "both":
         train_dataset = torch.utils.data.ConcatDataset([image_datasets_pk_lot["train"], image_datasets_cnr_park["train"]])

@@ -21,7 +21,7 @@ print(f"Using {device}")
 
 image_folder = "inference/parking_mag/"
 annotation_folder = "inference/annotations/"
-model_dir = "models/m_alex_net_combined.pth"
+model_dir = "models/malex_net_combined_bce_state_dict.pth"
 predicted_images = "/predicted_images/"
 
 if not os.path.isdir("predicted_images"):
@@ -39,7 +39,7 @@ transform = transforms.Compose(
 )
 
 
-model = mAlexNet(num_classes=2).to(device)
+model = mAlexNet().to(device)
 model.load_state_dict(
     torch.load(model_dir, map_location=torch.device(device))
 )
@@ -47,6 +47,8 @@ model.eval()
 
 model.to(device)
 start_time = time.time()
+# Visualize proba
+
 
 # for image in image_folder
 # find annotation with the same name in annotation folder
@@ -87,7 +89,10 @@ for image_filename in os.listdir(image_folder):
                 img = img.to(device)
                 with torch.no_grad():
                     outputs = model(img)
-                    _, preds = torch.max(outputs, 1)
+                    #print(outputs)
+                    #proba_max, preds = torch.max(outputs, 1)
+                    preds = (torch.sigmoid(outputs) > 0.5).float()
+
                     is_busy = preds[0]
 
                 if is_busy == 1:
@@ -99,6 +104,11 @@ for image_filename in os.listdir(image_folder):
                         (0, 0, 255),
                         2,
                     )
+                    # Draw black background rectangle
+                    # cv2.rectangle(image_to_draw, (xmin, ymin), (xmin, ymin+10), (0,0,0), -1)
+                    # cv2.putText(image_to_draw, str(proba_max.item()), (xmin, ymin-10), 
+                    #             cv2.FONT_HERSHEY_SIMPLEX, 1, (36,255,12), 2)
+
 
                 else:
                     # Free 0 green
@@ -109,6 +119,8 @@ for image_filename in os.listdir(image_folder):
                         (0, 255, 0),
                         2,
                     )
+                    #cv2.putText(image_to_draw, str(proba_max.item()), (xmin, ymin-10), cv2.FONT_HERSHEY_SIMPLEX, 1, (36,255,12), 2)
+
             print(image_filename)
 
             cv2.imwrite(f"predicted_images/{image_filename}", image_to_draw)
