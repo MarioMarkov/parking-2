@@ -21,7 +21,7 @@ print(f"Using {device}")
 
 image_folder = "inference/parking_mag/"
 annotation_folder = "inference/annotations/"
-model_dir = "models/malex_net_combined_bce_state_dict.pth"
+model_dir = "models/malex_net_combined_bce.pth"
 predicted_images = "/predicted_images/"
 
 if not os.path.isdir("predicted_images"):
@@ -106,8 +106,8 @@ for image_filename in os.listdir(image_folder):
                     )
                     # Draw black background rectangle
                     # cv2.rectangle(image_to_draw, (xmin, ymin), (xmin, ymin+10), (0,0,0), -1)
-                    # cv2.putText(image_to_draw, str(proba_max.item()), (xmin, ymin-10), 
-                    #             cv2.FONT_HERSHEY_SIMPLEX, 1, (36,255,12), 2)
+                    cv2.putText(image_to_draw, str(round(torch.sigmoid(outputs).item(),2)), (xmin, ymin-10), 
+                                cv2.FONT_HERSHEY_SIMPLEX, 1, (36,255,12), 2)
 
 
                 else:
@@ -119,7 +119,7 @@ for image_filename in os.listdir(image_folder):
                         (0, 255, 0),
                         2,
                     )
-                    #cv2.putText(image_to_draw, str(proba_max.item()), (xmin, ymin-10), cv2.FONT_HERSHEY_SIMPLEX, 1, (36,255,12), 2)
+                    cv2.putText(image_to_draw, str(round(torch.sigmoid(outputs).item(),2)), (xmin, ymin-10), cv2.FONT_HERSHEY_SIMPLEX, 1, (36,255,12), 2)
 
             print(image_filename)
 

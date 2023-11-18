@@ -1,4 +1,4 @@
-# parking-spot-detection
+# parking-spot-detection 🅿️🚗
 
 Scripts to train and test a parking spot detection model
 
