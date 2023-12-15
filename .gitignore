@@ -1,8 +1,10 @@
-/intersections
-/predicted_images
+intersections/
+predicted_images/
+predicted_images2/
 .mp4
 mask_1920_1080.png
-/video
-/obsolete
+video/
+obsolete/
 .vscode
-/__pycache__
+__pycache__/
+.DS_Store
