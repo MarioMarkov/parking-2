@@ -39,9 +39,12 @@ class mAlexNet(nn.Module):
         self.layer5 = nn.Linear(in_features=48, out_features=1)
         
     def forward(self, x):
+        # Convolutions
         x = self.layer1(x)
         x = self.layer2(x)
         x = self.layer3(x)
+        
+        # Classificator
         x = x.reshape(x.size(0), -1)
         x = self.layer4(x)
         return self.layer5(x)

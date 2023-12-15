@@ -50,7 +50,7 @@ def train_model(
             # Iterate over data
             for inputs, labels in tqdm(dataloaders[phase]):
                 inputs = inputs.to(device)
-                labels = labels.to(device).unsqueeze(1).float()
+                labels = labels.to(device)#.unsqueeze(1).float()
 
                 # zero the parameter gradients
                 optimizer.zero_grad()
@@ -58,17 +58,18 @@ def train_model(
                 # forward
                 # track history if only in train
                 with torch.set_grad_enabled(phase == "train"):
-                    outputs = model(inputs)
+                    outputs = model(inputs).squeeze(dim=1)
                     #_, preds = torch.max(outputs, 1)
                     #preds = np.where(outputs > 0, 1, 0)
                     preds = (torch.sigmoid(outputs) > 0.5).float()
 
-                    loss = criterion(outputs, labels)
+                    loss = criterion(outputs, labels.float())
 
                     # backward + optimize only if in training phase
                     if phase == "train":
                         loss.backward()
                         optimizer.step()
+                        
                 # statistics
                 running_loss += loss.item() * inputs.size(0)
                 running_corrects += torch.sum(preds == labels.data)

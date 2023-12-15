@@ -34,7 +34,7 @@ FLAGS.add_argument(
     "--dataset", default="pk_lot", help="On which dataset to train or test. Possible values are: 'both', 'pk_lot', 'cnr_park'"
 )
 FLAGS.add_argument("--model_name", default="alex_net", help="Model name")
-FLAGS.add_argument("--epochs", default=2, help="Epochs")
+FLAGS.add_argument("--epochs", default=3, help="Epochs")
 FLAGS.add_argument("--batch_size", default=32, help="Batch size")
 args = FLAGS.parse_args()
 
@@ -125,19 +125,20 @@ def main():
             weights= "DEFAULT", quantize=True
         )
         model.classifier[-1].out_features = 2
-
-    else:
-        # model = models.alexnet(weights="IMAGENET1K_V1")
-        # model.classifier = nn.Sequential(
-        #     nn.Dropout(p=0.5, inplace=False),
-        #     nn.Linear(in_features=9216, out_features=256, bias=True),
-        #     nn.ReLU(inplace=True),
-        #     nn.Dropout(p=0.5, inplace=False),
-        #     nn.Linear(in_features=256, out_features=128, bias=True),
-        #     nn.ReLU(inplace=True),
-        #     nn.Linear(in_features=128, out_features=2, bias=True),
-        # )
+    elif args.model_name == "m_alex_net":
         model = mAlexNet()
+    else:
+        model = models.alexnet(weights="IMAGENET1K_V1")
+        model.classifier = nn.Sequential(
+            nn.Dropout(p=0.5, inplace=False),
+            nn.Linear(in_features=9216, out_features=256, bias=True),
+            nn.ReLU(inplace=True),
+            nn.Dropout(p=0.5, inplace=False),
+            nn.Linear(in_features=256, out_features=128, bias=True),
+            nn.ReLU(inplace=True),
+            nn.Linear(in_features=128, out_features=1, bias=True),
+        )
+       
 
     # Send model to device
     model = model.to(device)
