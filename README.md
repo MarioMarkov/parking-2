@@ -8,12 +8,12 @@ corresponding arguments:
 ### Training
 
 ```
-python main.py --model_name=malex_net_pk_lot
---pk_lot_dir=pk_lot_data
---cnr_park_dir=cnr_parking_data
---dataset=both
---epochs=2
+python main.py --model_name=m_alex_net_cnr
+--dataset=cnr_park
 -train
+--epochs=3
+--model_type=m_alex
+--batch_size=32
 ```
 
 ### Testing
