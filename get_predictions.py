@@ -19,13 +19,14 @@ elif torch.backends.mps.is_available():
     
 print(f"Using {device}")
 
-image_folder = "./inference_label_studio/images"
-annotation_folder = "./inference_label_studio/Annotations"
-model_dir = "models/alex_net_cnr.pth"
-predicted_images = "/predicted_images2/"
+model = "alex" #m_alex
+image_dir= "./inference/images"
+annotation_dir= "./inference/Annotations"
+model_dir = "./models/final_alex_net_cnr.pth"
+predicted_dir = "./predicted_images"
 
-if not os.path.isdir("predicted_images2"):
-    os.mkdir("predicted_images2")
+if not os.path.isdir(predicted_dir):
+    os.mkdir(predicted_dir)
 
 
 # Transformations
@@ -39,17 +40,22 @@ transform = transforms.Compose(
 )
 
 
-#model = mAlexNet().to(device)
-model = models.alexnet(weights="IMAGENET1K_V1")
-model.classifier = nn.Sequential(
-    nn.Dropout(p=0.5, inplace=False),
-    nn.Linear(in_features=9216, out_features=256, bias=True),
-    nn.ReLU(inplace=True),
-    nn.Dropout(p=0.5, inplace=False),
-    nn.Linear(in_features=256, out_features=128, bias=True),
-    nn.ReLU(inplace=True),
-    nn.Linear(in_features=128, out_features=1, bias=True),
-)
+if model == "m_alex":
+    model = mAlexNet()
+elif model  == "alex":
+    model = models.alexnet(weights="IMAGENET1K_V1")
+    model.classifier = nn.Sequential(
+        nn.Dropout(p=0.5, inplace=False),
+        nn.Linear(in_features=9216, out_features=256, bias=True),
+        nn.ReLU(inplace=True),
+        nn.Dropout(p=0.5, inplace=False),
+        nn.Linear(in_features=256, out_features=128, bias=True),
+        nn.ReLU(inplace=True),
+        nn.Linear(in_features=128, out_features=1, bias=True),
+    )
+else:
+    raise Exception("Not a valid model type")
+
 
 model = model.to(device)
 
@@ -58,16 +64,13 @@ model.load_state_dict(
 )
 model.eval()
 
-model.to(device)
+
 start_time = time.time()
-# Visualize proba
-
-
 # for image in image_folder
 # find annotation with the same name in annotation folder
 # run the whole anlaysis and generate image_with_boxes in folder
-for image_filename in os.listdir(image_folder):
-    image_path = os.path.join(image_folder, image_filename)
+for image_filename in os.listdir(image_dir):
+    image_path = os.path.join(image_dir, image_filename)
 
     image_to_draw = cv2.imread(image_path)
     #print("Path: ", image_path)
@@ -75,7 +78,7 @@ for image_filename in os.listdir(image_folder):
     full_image = full_image.convert('RGB')
     if image_filename.endswith(".jpg") or image_filename.endswith(".png"):
         annotation_filename = os.path.join(
-            annotation_folder,
+            annotation_dir,
             image_filename.replace(".jpg", ".xml").replace(".png", ".xml"),
         )
 
@@ -136,7 +139,7 @@ for image_filename in os.listdir(image_folder):
 
             print(image_filename)
 
-            cv2.imwrite(f"predicted_images2/{image_filename}", image_to_draw)
+            cv2.imwrite(f"{predicted_dir}/{image_filename}", image_to_draw)
 
 
 print("Execution time: %s seconds" % (time.time() - start_time))

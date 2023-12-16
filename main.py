@@ -15,10 +15,11 @@ from utils.image_utils import mAlexNet
 
 
 #train
-# python main.py --model_name=malex_net_pk_lot --pk_lot_dir=pk_lot_data --cnr_park_dir=cnr_parking_data --epochs=2 --dataset=both  -train 
+# python main.py --model_name=alex_net_cnr --cnr_park_dir=cnr_parking_data --dataset='cnr_park' -train
+# --epochs=5 --model_type=alex
 
 #test 
-# python main.py --model_name=malex_net_combined_state_dict --dataset=cnr_park
+# python main.py --model_name=alex_net_cnr --dataset=cnr_park
 FLAGS = argparse.ArgumentParser(description="Train Model")
 
 FLAGS.add_argument('-train',
@@ -31,11 +32,15 @@ FLAGS.add_argument(
     "--cnr_park_dir", default="cnr_parking_data/", help="Location to the cnr_park data path"
 )
 FLAGS.add_argument(
-    "--dataset", default="pk_lot", help="On which dataset to train or test. Possible values are: 'both', 'pk_lot', 'cnr_park'"
+    "--dataset", default="pk_lot",choices=['both', 'pk_lot', 'cnr_park'] ,help="On which dataset to train or test. Possible values are: 'both', 'pk_lot', 'cnr_park'"
 )
 FLAGS.add_argument("--model_name", default="alex_net", help="Model name")
+
+FLAGS.add_argument("--model_type", default="alex",choices=['alex', 'm_alex', 'mobile_net'], help="Possible values are: 'alex', 'm_alex', 'mobile_net")
+
+
 FLAGS.add_argument("--epochs", default=3, help="Epochs")
-FLAGS.add_argument("--batch_size", default=32, help="Batch size")
+FLAGS.add_argument("--batch_size", default=32, help="Batch size", type = int)
 args = FLAGS.parse_args()
 
 
@@ -79,6 +84,11 @@ def main():
     split_point = dataset_size // 2
     image_datasets_pk_lot["val"] , _ = random_split(image_datasets_pk_lot["val"], [split_point, dataset_size - split_point])
     
+    # Split train set in 2
+    dataset_size = len(image_datasets_pk_lot["train"])
+    split_point = dataset_size // 2
+    image_datasets_pk_lot["train"] , _ = random_split(image_datasets_pk_lot["train"], [split_point, dataset_size - split_point])
+    
     
     
     image_datasets_cnr_park = {
@@ -86,9 +96,9 @@ def main():
         for x in ["train", "val"]
     }
     # Split val set in 2
-    dataset_size = len(image_datasets_cnr_park["val"])
-    split_point = dataset_size // 2
-    image_datasets_cnr_park["val"], _ = random_split(image_datasets_cnr_park["val"], [split_point, dataset_size - split_point])
+    # dataset_size = len(image_datasets_cnr_park["val"])
+    # split_point = dataset_size // 2
+    # image_datasets_cnr_park["val"], _ = random_split(image_datasets_cnr_park["val"], [split_point, dataset_size - split_point])
     
     if args.dataset == "both":
         train_dataset = torch.utils.data.ConcatDataset([image_datasets_pk_lot["train"], image_datasets_cnr_park["train"]])
@@ -120,14 +130,16 @@ def main():
     dataset_sizes = {"train": len(train_dataset) , "val": len(val_dataset)}
     print("Size of train and test: ", dataset_sizes)
 
-    if args.model_name == "mobile_net":
+    if args.model_type == "mobile_net":
         model = torchvision.models.quantization.mobilenet_v2(
             weights= "DEFAULT", quantize=True
         )
         model.classifier[-1].out_features = 2
-    elif args.model_name == "m_alex_net":
+    elif args.model_type == "m_alex":
         model = mAlexNet()
-    else:
+        
+    elif args.model_type == "alex":
+        
         model = models.alexnet(weights="IMAGENET1K_V1")
         model.classifier = nn.Sequential(
             nn.Dropout(p=0.5, inplace=False),
@@ -138,6 +150,10 @@ def main():
             nn.ReLU(inplace=True),
             nn.Linear(in_features=128, out_features=1, bias=True),
         )
+        
+    else:
+        raise Exception("Not a valid model type")
+
        
 
     # Send model to device

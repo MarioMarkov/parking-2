@@ -20,8 +20,6 @@ def test_model(
             _, preds = torch.max(outputs, 1)
             running_corrects += torch.sum(preds == labels.data)
 
-        
-        
     accuracy = running_corrects.to(torch.float32) / dataset_sizes["val"]
     accuracy
     

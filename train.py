@@ -86,9 +86,9 @@ def train_model(
             if phase == "val" and epoch_accuracy > best_accuracy:
                 best_accuracy = epoch_accuracy
                 torch.save(
-                    model.state_dict(), f"{working_dir}/{model_name}_state_dict.pth"
+                    model.state_dict(), f"{working_dir}/{model_name}_best_acc.pth"
                 )
-                torch.save(model, f"{working_dir}/full_{model_name}.pth")
+                #torch.save(model, f"{working_dir}/full_{model_name}.pth")
 
         print()
         torch.save(model.state_dict(), f"{working_dir}/final_{model_name}.pth")
