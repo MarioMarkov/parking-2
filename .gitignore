@@ -8,6 +8,7 @@ obsolete/
 *.vscode
 .DS_Store
 test_video.ipynb
+output_patches/
 
 
 

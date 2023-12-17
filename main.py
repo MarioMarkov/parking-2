@@ -84,10 +84,10 @@ def main():
     split_point = dataset_size // 2
     image_datasets_pk_lot["val"] , _ = random_split(image_datasets_pk_lot["val"], [split_point, dataset_size - split_point])
     
-    # Split train set in 2
-    dataset_size = len(image_datasets_pk_lot["train"])
-    split_point = dataset_size // 2
-    image_datasets_pk_lot["train"] , _ = random_split(image_datasets_pk_lot["train"], [split_point, dataset_size - split_point])
+    # # Split train set in 2
+    # dataset_size = len(image_datasets_pk_lot["train"])
+    # split_point = dataset_size // 2
+    # image_datasets_pk_lot["train"] , _ = random_split(image_datasets_pk_lot["train"], [split_point, dataset_size - split_point])
     
     
     

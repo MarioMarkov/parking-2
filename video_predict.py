@@ -22,7 +22,7 @@ print(f"Using {device}")
 model = "m_alex" #m_alex
 image_dir= "./inference/images"
 annotation_dir= "./inference/Annotations"
-model_dir = "./models/m_alex_net_both_best_acc.pth"
+model_dir = "./models/m_alex_net_pk_best_acc.pth"
 #predicted_dir = "./predicted_images"
 
 

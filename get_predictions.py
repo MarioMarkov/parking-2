@@ -95,6 +95,7 @@ for image_filename in os.listdir(image_dir):
                 ymax = int(values["ymax"])
                 # Crop patch for the image
                 patch = full_image.crop((xmin, ymin, xmax, ymax))
+                print(type(patch))
                 # img = Image.open(patch)
                 # image_to_show = np.transpose(np.array(patch),(1, 2, 0))
                 # plt.imshow(patch)
