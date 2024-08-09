@@ -19,10 +19,10 @@ elif torch.backends.mps.is_available():
     
 print(f"Using {device}")
 
-model = "alex" #m_alex
-image_dir= "./inference/images"
-annotation_dir= "./inference/Annotations"
-model_dir = "./models/final_alex_net_cnr.pth"
+model = "m_alex" #m_alex
+image_dir= "./inference-label-studio/images"
+annotation_dir= "./inference-label-studio/Annotations"
+model_path = "./models/m_alex_net_both_best_acc.pth"
 predicted_dir = "./predicted_images"
 
 if not os.path.isdir(predicted_dir):
@@ -60,7 +60,7 @@ else:
 model = model.to(device)
 
 model.load_state_dict(
-    torch.load(model_dir, map_location=torch.device(device))
+    torch.load(model_path, map_location=torch.device(device))
 )
 model.eval()
 
@@ -95,7 +95,7 @@ for image_filename in os.listdir(image_dir):
                 ymax = int(values["ymax"])
                 # Crop patch for the image
                 patch = full_image.crop((xmin, ymin, xmax, ymax))
-                print(type(patch))
+                #print(type(patch))
                 # img = Image.open(patch)
                 # image_to_show = np.transpose(np.array(patch),(1, 2, 0))
                 # plt.imshow(patch)

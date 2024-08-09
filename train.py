@@ -18,21 +18,14 @@ def train_model(
     num_epochs=3,
 ):
     since = time.time()
-    #torch.backends.quantized.engine = backend
-
-    #Use BCEWithLogitsLoss() instead of BCELoss() since BCEWithLogitsLoss()already includes a sigmoid layer
     criterion = nn.BCEWithLogitsLoss()
-    #criterion = nn.CrossEntropyLoss()
-
-    # Define optimizer for nn
     optimizer = optim.AdamW(model.parameters(),lr=0.001, fused=True)
     scheduler = lr_scheduler.StepLR(optimizer, step_size=7, gamma=0.1)
-
-    #best_model_params_path = os.path.join("best_model_statedict.pt")
     working_dir = os.getcwd()
     print(f"Model save path (working dir): {working_dir}")
     
     best_accuracy = 0.0
+
     for epoch in range(num_epochs):
         print(f"Epoch {epoch}/{num_epochs - 1}")
         print("-" * 10)
@@ -49,8 +42,7 @@ def train_model(
             
             # Iterate over data
             for inputs, labels in tqdm(dataloaders[phase]):
-                inputs = inputs.to(device)
-                labels = labels.to(device)#.unsqueeze(1).float()
+                inputs, labels = inputs.to(device), labels.to(device)
 
                 # zero the parameter gradients
                 optimizer.zero_grad()
@@ -59,8 +51,7 @@ def train_model(
                 # track history if only in train
                 with torch.set_grad_enabled(phase == "train"):
                     outputs = model(inputs).squeeze(dim=1)
-                    #_, preds = torch.max(outputs, 1)
-                    #preds = np.where(outputs > 0, 1, 0)
+                    
                     preds = (torch.sigmoid(outputs) > 0.5).float()
 
                     loss = criterion(outputs, labels.float())
@@ -76,6 +67,7 @@ def train_model(
 
             if phase == "train":
                 scheduler.step()
+                
             epoch_loss = running_loss / dataset_sizes[phase]
             epoch_accuracy = running_corrects.to(torch.float32) / dataset_sizes[phase]
 

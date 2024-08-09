@@ -79,6 +79,12 @@ def main():
         x: datasets.ImageFolder(os.path.join(pk_lot_dir,x), data_transforms[x])
         for x in ["train", "val"]
     }
+
+    image_datasets_cnr_park = {
+        x: datasets.ImageFolder(os.path.join(cnr_park_dir,x), data_transforms[x])
+        for x in ["train", "val"]
+    }
+
     # Split val set in 2
     dataset_size = len(image_datasets_pk_lot["val"])
     split_point = dataset_size // 2
@@ -112,7 +118,7 @@ def main():
     else:
         print("Not a valid image dataset provided. Possible values are: 'both', 'pk_lot', 'cnr_park'")
 
-    dataloaders= {
+    dataloaders = {
         "train": torch.utils.data.DataLoader(
             train_dataset,
             batch_size=args.batch_size,
@@ -177,7 +183,7 @@ def main():
             dataset_sizes,
             device,
             args.model_name)
-        print(f"Model accuracy: {round(results.item(),5)*100}%")
+        print(f"Model accuracy: {round(results,5)*100}%")
 
 if __name__ == "__main__":
     main()
